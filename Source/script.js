@@ -32,25 +32,27 @@ function init() {
         dialogInput.className = document.getElementById("title").value;
         dialogInput.date = document.getElementById("date").value;
         dialogInput.feedBack = document.querySelector("textarea").value;
-
-        if (firstRow == null) {
-            let table = document.getElementById("feedbackList").getElementsByTagName('tbody')[0];
-            let newRow = table.insertRow(table.length);
-            let cell1 = newRow.insertCell(0);
-            cell1.innerHTML = dialogInput.className;
-            let cell2 = newRow.insertCell(1);
-            cell2.innerHTML = dialogInput.date;
-            let cell3 = newRow.insertCell(2);
-            cell3.innerHTML = dialogInput.feedBack;
-        } else {
-            currentRow.cells[0].innerHTML = dialogInput.className;;
-            currentRow.cells[1].innerHTML = dialogInput.date;
-            currentRow.cells[2].innerHTML = dialogInput.feedBack;;
-        }
+        const commentObject=new Object();
+        commentObject["classname"] = dialogInput.className;
+        commentObject["date"] = dialogInput.date;
+        commentObject["feedBack"] = dialogInput.feedBack;
+        const temp = document.createElement('the-element');
+        temp.data = commentObject;
+        const curcomments = getCommentsFromStorage();
+        curcomments.push(commentObject);
+        saveCommentToStorage(curcomments);
         resetForm();
         console.log("saved");
         confirmationMessage.textContent = "Feedback saved!";
     });
+    function saveCommentToStorage(comment) {
+        // EXPLORE - START (All explore numbers start with B)
+        // B1. TODO - Complete the functionality as described in this function
+        //            header. It is possible in only a single line, but should
+        //            be no more than a few lines.
+        
+        localStorage.setItem("comment",JSON.stringify(comment));
+      }
 
     // after each save button click, the form needs to be cleared so for next new feedback it will be ready
     let resetForm = () => {
@@ -60,13 +62,53 @@ function init() {
         currentRow = null;
     }
 
+   
     // this will trigger the dialog box that has all the feedbacks so the user can see them
     viewFeedbackButton.addEventListener('click', () => {
-        if (typeof viewFeedbackDialog.showModal === "function") { // check if the dialog is already open or not
-            viewFeedbackDialog.showModal(); // open the dialog box
-        }
+        // Get the recipes from localStorage
+        let comments = getCommentsFromStorage();
+        // Add each recipe to the <main> element
+        addCommentsToDocument(comments);
     });
 
+    /**
+    * Reads 'comments' from localStorage and returns an array of
+    * all of the comments found (parsed, not in string form). If
+    * nothing is found in localStorage for 'comments', an empty array
+    * is returned.
+    * @returns {Array<Object>} An array of recipes found in localStorage
+    */
+    function getCommentsFromStorage() {
+        if (localStorage.getItem('comment') == null) {
+            const emptyArray = [];
+            return emptyArray;
+        }
+        const str = localStorage.getItem("comment");
+        return JSON.parse(str);
+    }
+
+    /**
+    * Takes in an array of recipes and for each recipe creates a
+    * new <recipe-card> element, adds the recipe data to that card
+    * using element.data = {...}, and then appends that new recipe
+    * to <main>
+    * @param {Array<Object>} comments An array of recipes
+    */
+    function addCommentsToDocument(comments) {
+  
+    // A10. TODO - Get a reference to the <main> element
+    const main = document.querySelector("main");
+    // A11. TODO - Loop through each of the recipes in the passed in array,
+    //            create a <recipe-card> element for each one, and populate
+    //            each <recipe-card> with that recipe data using element.data = ...
+    //            Append each element to <main>
+    if(comments==null) return;
+    for(let i =0; i<comments.length;i++){
+      const temp = document.createElement('the-element');
+      temp.data=comments[i];
+      main.appendChild(temp);
+    }
+}
     // this will close the dialog box that has the feedbacks list
     closeFeedbackDialog.addEventListener('click', () => {
         viewFeedbackDialog.close();
