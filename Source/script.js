@@ -46,10 +46,6 @@ function init() {
         confirmationMessage.textContent = "Feedback saved!";
     });
     function saveCommentToStorage(comment) {
-        // EXPLORE - START (All explore numbers start with B)
-        // B1. TODO - Complete the functionality as described in this function
-        //            header. It is possible in only a single line, but should
-        //            be no more than a few lines.
         
         localStorage.setItem("comment",JSON.stringify(comment));
       }
@@ -96,12 +92,7 @@ function init() {
     */
     function addCommentsToDocument(comments) {
   
-    // A10. TODO - Get a reference to the <main> element
     const main = document.querySelector("main");
-    // A11. TODO - Loop through each of the recipes in the passed in array,
-    //            create a <recipe-card> element for each one, and populate
-    //            each <recipe-card> with that recipe data using element.data = ...
-    //            Append each element to <main>
     if(comments==null) return;
     for(let i =0; i<comments.length;i++){
       const temp = document.createElement('the-element');

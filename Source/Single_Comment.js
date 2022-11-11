@@ -44,7 +44,6 @@ class SingleComment extends HTMLElement {
         color: #70757A;
         font-size: 12px;
       }`
-      // A5. TODO - Append the <style> and <article> elements to the Shadow DOM
       
       shadow.appendChild(newStyle);
       shadow.appendChild(newArticle);
@@ -70,10 +69,6 @@ class SingleComment extends HTMLElement {
       console.log(data);
       const addedArticle = this.shadowRoot.querySelector("article");
       
-      // A7. TODO - Set the contents of the <article> with the <article> template given in
-      //           cardTemplate.html and the data passed in (You should only have one <article>,
-      //           do not nest an <article> inside another <article>). You should use Template
-      //           literals (tempalte strings) and element.innerHTML for this.
       console.log(data.classname);
       addedArticle.innerHTML=`
     <p class="title">
