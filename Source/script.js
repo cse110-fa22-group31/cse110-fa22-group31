@@ -9,9 +9,11 @@ function init() {
     let cancelButton = document.getElementById('cancelButton'); // this button is used inside the dialog box
     let firstRow = null; // this is the first row of the table
     let currentRow = null; // this is the row that is currently selected and is under work 
+    let deleteFeedbackButton = document.getElementById("deleteFeedback"); //element for delete feedback button.
     let viewFeedbackButton = document.getElementById('viewFeedback'); // element for view feedback button show trigger the feedbacks dialog box to open
     let viewFeedbackDialog = document.getElementById('feedbackListTable'); //this dialog box will be triggered by view feedbacks button and
     let closeFeedbackDialog = document.getElementById('closeButton'); // close the feedbacks dialog box
+    let closeCommentButton = document.getElementById('closeComments'); //close the comments list;
     let confirmationMessage = document.getElementById('confirmationMessage'); // just a confirmation meessage to assure the user that the input has been saved. the feedback can be seen by clicking view feedback button
 
     //when the newFeedbackButton is clicked, th dialog box should open
@@ -58,13 +60,28 @@ function init() {
         currentRow = null;
     }
 
-   
-    // this will trigger the dialog box that has all the feedbacks so the user can see them
+    //this will delete feedbacks from local storage
+    deleteFeedbackButton?.addEventListener('click', () => {
+        localStorage.clear();
+    });
+
+    // this will show comments store in localStorage.
     viewFeedbackButton.addEventListener('click', () => {
         // Get the recipes from localStorage
         let comments = getCommentsFromStorage();
         // Add each recipe to the <main> element
         addCommentsToDocument(comments);
+        //show close comment button
+        closeCommentButton?.removeAttribute("hidden");
+    });
+
+    //close comments shown in main
+    closeCommentButton?.addEventListener('click', () => {
+        //clear comments list
+        const mainEL = document.querySelector("main");
+        mainEL.innerHTML = '';
+        //hide button
+        closeCommentButton?.setAttribute("hidden", "hidden");
     });
 
     /**
@@ -85,19 +102,19 @@ function init() {
 
     /**
     * Takes in an array of recipes and for each recipe creates a
-    * new <recipe-card> element, adds the recipe data to that card
+    * new <Single-Comment> element, adds the recipe data to that card
     * using element.data = {...}, and then appends that new recipe
     * to <main>
     * @param {Array<Object>} comments An array of recipes
     */
     function addCommentsToDocument(comments) {
-  
-    const main = document.querySelector("main");
+    const mainEL = document.querySelector("main");
+    mainEL.innerHTML = '';
     if(comments==null) return;
     for(let i =0; i<comments.length;i++){
       const temp = document.createElement('the-element');
       temp.data=comments[i];
-      main.appendChild(temp);
+      mainEL.appendChild(temp);
     }
 }
     // this will close the dialog box that has the feedbacks list
