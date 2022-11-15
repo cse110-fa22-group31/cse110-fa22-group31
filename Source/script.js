@@ -34,7 +34,7 @@ function init() {
         dialogInput.className = document.getElementById("title").value;
         dialogInput.date = document.getElementById("date").value;
         dialogInput.feedBack = document.querySelector("textarea").value;
-        const commentObject=new Object();
+        const commentObject = new Object();
         commentObject["classname"] = dialogInput.className;
         commentObject["date"] = dialogInput.date;
         commentObject["feedBack"] = dialogInput.feedBack;
@@ -47,10 +47,11 @@ function init() {
         console.log("saved");
         confirmationMessage.textContent = "Feedback saved!";
     });
+
     function saveCommentToStorage(comment) {
-        
-        localStorage.setItem("comment",JSON.stringify(comment));
-      }
+
+        localStorage.setItem("comment", JSON.stringify(comment));
+    }
 
     // after each save button click, the form needs to be cleared so for next new feedback it will be ready
     let resetForm = () => {
@@ -61,36 +62,52 @@ function init() {
     }
 
     //this will delete feedbacks from local storage
-    deleteFeedbackButton?.addEventListener('click', () => {
+    deleteFeedbackButton.addEventListener('click', () => {
         localStorage.clear();
     });
 
     // this will show comments store in localStorage.
     viewFeedbackButton.addEventListener('click', () => {
         // Get the recipes from localStorage
+        let table = document.getElementById("feedbackList").getElementsByTagName('tbody')[0];
+
         let comments = getCommentsFromStorage();
         // Add each recipe to the <main> element
-        addCommentsToDocument(comments);
+        //addCommentsToDocument(comments);
+        console.log(" hey man" + comments[0].date + " " + comments[0].feedBack);
         //show close comment button
-        closeCommentButton?.removeAttribute("hidden");
+
+        for (let i = 0; i < comments.length; i++) {
+            let newRow = table.insertRow(table.length);
+            let cell1 = newRow.insertCell(0);
+            cell1.innerHTML = comments[i].className;
+            let cell2 = newRow.insertCell(1);
+            cell2.innerHTML = comments[i].date;
+            let cell3 = newRow.insertCell(2);
+            cell3.innerHTML = comments[i].feedBack;
+        }
+        if (typeof viewFeedbackDialog.showModal === "function") { // check if the dialog is already open or not
+            viewFeedbackDialog.showModal(); // open the dialog box
+        }
+        closeCommentButton.removeAttribute("hidden");
     });
 
     //close comments shown in main
-    closeCommentButton?.addEventListener('click', () => {
+    closeCommentButton.addEventListener('click', () => {
         //clear comments list
         const mainEL = document.querySelector("main");
         mainEL.innerHTML = '';
         //hide button
-        closeCommentButton?.setAttribute("hidden", "hidden");
+        closeCommentButton.setAttribute("hidden", "hidden");
     });
 
     /**
-    * Reads 'comments' from localStorage and returns an array of
-    * all of the comments found (parsed, not in string form). If
-    * nothing is found in localStorage for 'comments', an empty array
-    * is returned.
-    * @returns {Array<Object>} An array of recipes found in localStorage
-    */
+     * Reads 'comments' from localStorage and returns an array of
+     * all of the comments found (parsed, not in string form). If
+     * nothing is found in localStorage for 'comments', an empty array
+     * is returned.
+     * @returns {Array<Object>} An array of recipes found in localStorage
+     */
     function getCommentsFromStorage() {
         if (localStorage.getItem('comment') == null) {
             const emptyArray = [];
@@ -101,22 +118,22 @@ function init() {
     }
 
     /**
-    * Takes in an array of recipes and for each recipe creates a
-    * new <Single-Comment> element, adds the recipe data to that card
-    * using element.data = {...}, and then appends that new recipe
-    * to <main>
-    * @param {Array<Object>} comments An array of recipes
-    */
+     * Takes in an array of recipes and for each recipe creates a
+     * new <Single-Comment> element, adds the recipe data to that card
+     * using element.data = {...}, and then appends that new recipe
+     * to <main>
+     * @param {Array<Object>} comments An array of recipes
+     */
     function addCommentsToDocument(comments) {
-    const mainEL = document.querySelector("main");
-    mainEL.innerHTML = '';
-    if(comments==null) return;
-    for(let i =0; i<comments.length;i++){
-      const temp = document.createElement('the-element');
-      temp.data=comments[i];
-      mainEL.appendChild(temp);
+        const mainEL = document.querySelector("main");
+        mainEL.innerHTML = '';
+        if (comments == null) return;
+        for (let i = 0; i < comments.length; i++) {
+            const temp = document.createElement('the-element');
+            temp.data = comments[i];
+            mainEL.appendChild(temp);
+        }
     }
-}
     // this will close the dialog box that has the feedbacks list
     closeFeedbackDialog.addEventListener('click', () => {
         viewFeedbackDialog.close();
