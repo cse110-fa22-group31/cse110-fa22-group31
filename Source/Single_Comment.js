@@ -2,15 +2,15 @@
 
 class SingleComment extends HTMLElement {
     constructor() {
-      super(); // Inheret everything from HTMLElement
-      //Attach the shadow DOM to this Web Component (leave the mode open)
-      const shadow = this.attachShadow({mode: 'open'});
-      //Create an <article> element - This will hold our markup once our data is set
-      const newArticle = document.createElement('article');
-      //Create a style element - This will hold all of the styles for the Web Component
-      const newStyle = document.createElement('style');
-      //Insert all of the styles from cardTemplate.html into the <style> element you just made
-      newStyle.textContent = `
+        super(); // Inheret everything from HTMLElement
+        //Attach the shadow DOM to this Web Component (leave the mode open)
+        const shadow = this.attachShadow({ mode: 'open' });
+        //Create an <article> element - This will hold our markup once our data is set
+        const newArticle = document.createElement('article');
+        //Create a style element - This will hold all of the styles for the Web Component
+        const newStyle = document.createElement('style');
+        //Insert all of the styles from cardTemplate.html into the <style> element you just made
+        newStyle.textContent = `
       * {
         font-family: sans-serif;
         margin: 0;
@@ -44,11 +44,11 @@ class SingleComment extends HTMLElement {
         color: #70757A;
         font-size: 12px;
       }`
-      
-      shadow.appendChild(newStyle);
-      shadow.appendChild(newArticle);
+
+        shadow.appendChild(newStyle);
+        shadow.appendChild(newArticle);
     }
-  
+
     /**
      * Called when the .data property is set on this element.
      *
@@ -63,27 +63,28 @@ class SingleComment extends HTMLElement {
      *                        }
      */
     set data(data) {
-      // If nothing was passed in, return
-      if (!data) return;
-  
-      console.log(data);
-      const addedArticle = this.shadowRoot.querySelector("article");
-      
-      console.log(data.classname);
-      addedArticle.innerHTML=`
+        // If nothing was passed in, return
+        if (!data) return;
+
+        console.log(data);
+        const addedArticle = this.shadowRoot.querySelector("article");
+        const feedbackTable = this.shadowRoot.querySelector("feedbackList");
+
+        /* addedArticle.innerHTML = `
     <p class="title">
       Comment details
     </p>
-    <p class="classname">`+data.classname+`</p>
+    <p class="classname">` + data.classname + `</p>
     <div class="date">
-      <span>(`+data.date+`)</span>
+      <span>(` + data.date + `)</span>
     </div>
-    <p class="feedback_content">`
-      +data.feedBack+
-    `</p>
-  `;
-    }
-  }
-  
+    <p class="feedback_content">` +
+            data.feedBack +
+            `</p>
+  `;*/
 
-  customElements.get('the-element')||customElements.define("the-element",SingleComment);
+    }
+}
+
+
+customElements.get('the-element') || customElements.define("the-element", SingleComment);
