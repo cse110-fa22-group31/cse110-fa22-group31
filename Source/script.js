@@ -31,15 +31,13 @@ function init() {
     //when save button is clicked, the class name, date and feedback needs to be saved and ready to be shown
     saveButton.addEventListener('click', () => {
         let dialogInput = {};
-        dialogInput.className = document.getElementById("title").value;
+        dialogInput.title = document.getElementById("title").value;
         dialogInput.date = document.getElementById("date").value;
         dialogInput.feedBack = document.querySelector("textarea").value;
         const commentObject = new Object();
-        commentObject["classname"] = dialogInput.className;
+        commentObject["title"] = dialogInput.title;
         commentObject["date"] = dialogInput.date;
         commentObject["feedBack"] = dialogInput.feedBack;
-        const temp = document.createElement('the-element');
-        temp.data = commentObject;
         const curcomments = getCommentsFromStorage();
         curcomments.push(commentObject);
         saveCommentToStorage(curcomments);
@@ -72,15 +70,13 @@ function init() {
         let table = document.getElementById("feedbackList").getElementsByTagName('tbody')[0];
 
         let comments = getCommentsFromStorage();
-        // Add each recipe to the <main> element
-        //addCommentsToDocument(comments);
         console.log(" hey man" + comments[0].date + " " + comments[0].feedBack);
-        //show close comment button
 
         for (let i = 0; i < comments.length; i++) {
             let newRow = table.insertRow(table.length);
             let cell1 = newRow.insertCell(0);
-            cell1.innerHTML = comments[i].className;
+            console.log("yo yo" + comments[i].title);
+            cell1.innerHTML = comments[i].title;
             let cell2 = newRow.insertCell(1);
             cell2.innerHTML = comments[i].date;
             let cell3 = newRow.insertCell(2);
@@ -89,17 +85,8 @@ function init() {
         if (typeof viewFeedbackDialog.showModal === "function") { // check if the dialog is already open or not
             viewFeedbackDialog.showModal(); // open the dialog box
         }
-        closeCommentButton.removeAttribute("hidden");
     });
 
-    //close comments shown in main
-    closeCommentButton.addEventListener('click', () => {
-        //clear comments list
-        const mainEL = document.querySelector("main");
-        mainEL.innerHTML = '';
-        //hide button
-        closeCommentButton.setAttribute("hidden", "hidden");
-    });
 
     /**
      * Reads 'comments' from localStorage and returns an array of
@@ -117,26 +104,11 @@ function init() {
         return JSON.parse(str);
     }
 
-    /**
-     * Takes in an array of recipes and for each recipe creates a
-     * new <Single-Comment> element, adds the recipe data to that card
-     * using element.data = {...}, and then appends that new recipe
-     * to <main>
-     * @param {Array<Object>} comments An array of recipes
-     */
-    function addCommentsToDocument(comments) {
-        const mainEL = document.querySelector("main");
-        mainEL.innerHTML = '';
-        if (comments == null) return;
-        for (let i = 0; i < comments.length; i++) {
-            const temp = document.createElement('the-element');
-            temp.data = comments[i];
-            mainEL.appendChild(temp);
-        }
-    }
+
     // this will close the dialog box that has the feedbacks list
     closeFeedbackDialog.addEventListener('click', () => {
         viewFeedbackDialog.close();
+        document.getElementById("feedbackList").getElementsByTagName('tbody')[0].innerHTML = '';
     });
 
 
