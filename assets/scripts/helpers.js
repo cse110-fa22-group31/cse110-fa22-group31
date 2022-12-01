@@ -93,16 +93,24 @@ export function createElems(jsonObjArray) {
 }
 
     /**
-    * @Todo add doc 
+    * function generateDropDown() 
+    * Populates an HTML select element with option elements
+    * built from the passed in array (grabbed from localStorage)
     *
     * @author Christian
+    * @param classList Parsed Array from Local Storage
     */
 export function generateDropDown(classList) {
+    // Will build the initial select element 
     let dropDownMenu = document.getElementById("classSelect");
     dropDownMenu.hidden = false;
-    // necessary ?
+    // populate the select element with only a initial value
     dropDownMenu.innerHTML = '<option value = "">See All</option>';
+    // will fill the select element with new htlm option elements pertaining 
+    // to the contents within the passed in array 
     for (let i = 0; i < classList.length; i++) {
+      // appends directly the the html document
+      // could be attached to a shadow dom maybe?
         const temp = document.createElement('option');
         temp.value = classList[i];
         temp.innerHTML = classList[i];
@@ -110,8 +118,11 @@ export function generateDropDown(classList) {
     }
 }
 
- /**
-    * @Todo add doc 
+    /**
+    * function updateCurrClass()
+    * Continually replaces the value in localStorage's 
+    * currClass key mapping with HTML select elements
+    * highlighted option
     *
     * @author Christian
     */
@@ -122,13 +133,20 @@ export function updateCurrClass() {
     localStorage.setItem('currClass', JSON.stringify(currClass));
 }
  /**
-    * @Todo add doc 
+    * function filterSubmissions()
+    * Filters out all feedback and keeps only what pertains to
+    * our current class value from local storage 
     *
     * @author Christian
+    * @param submissions Parsed array of all feedback 
+    * @return {Array<object>} of feedback that has className == our currClass
     */
   export function filterSubmissions(submissions) {
+    // initialize array incase nothing gets added 
     const filteredArray = [];
+    // linear search for submissions that match our currClass value
     for (const arrIdx in submissions) {
+        // if a match is found add it to our array
         if (submissions[arrIdx].className ==  JSON.parse(localStorage.getItem('currClass')).class) {
         filteredArray.push(submissions[arrIdx]);
         }
@@ -147,15 +165,26 @@ function NewclassCategory(className){
     localStorage.setItem(className,JSON.stringify(category));
 }
 
+/**
+ * function appendClass() 
+ * Saves user's new course input to local storage
+ * Reloads the page so the user sees their changes in the Select HTML element
+ * upon opening the dropdown 
+ *
+ * @author Christian 
+ */
 export function appendClass() {
     console.log("Sanity Check");
+    // Parse our storage for a classList; If none exists, create an empty array for it
     const classList = JSON.parse(localStorage.getItem("classList")) || []; // goated
+    // Add user's input from the textbox into our array pulled from local storage 
     let classValue = document.getElementById('newClass')?.value;
     classList?.push(classValue);
+    // resubmit our array with the newly added class to local storage 
     localStorage.setItem("classList", JSON.stringify(classList));
-    NewclassCategory(classValue); // idk what this does // sets up checkboxes on student add comment
+    NewclassCategory(classValue); // Attaches default categories to this class for local storage
     console.log('Succesfuly added new class');
-    // may break errthing :-)
+    // reload after submitting a new class so user sees their submission right away 
     location.reload();
 }
 /**
@@ -166,17 +195,30 @@ export function appendClass() {
  * Exports for add_feedback.js
  */
 
-export function appendComment() {  
+/**
+ * function appendComment()
+ * Takes user's inputs and saves their contents to local storage 
+ * Appends this new objects as an element of the submission array 
+ * in local storage 
+ *
+ * @author Christian 
+ */
+export function appendComment() {
+    // pull current submissions from localStorage 
+    // NOTE: submissions is an array of JSON objects 
     const submits = localStorage.getItem('submissions');
+    // save each user's input to variables  
     let course = document.getElementsById('Classname').value;
     let title = document.getElementById('FeedbackTitle').value;
     let content = document.getElementById('stucommenttxt').value;
+    // create new object and assign its key's with values 
+    // from user's inputs 
     let newSubmit = {};
-    console.log("hello");
     newSubmit.title = title;
     newSubmit.className = course;
     newSubmit.date = "today";
     newSubmit.feedBack = content;
     newSubmit.category = "TODO"
+    // append object to submissions array 
     submits.parse().push(newSubmit);
 }

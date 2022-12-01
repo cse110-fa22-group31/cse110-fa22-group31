@@ -7,7 +7,9 @@ window.addEventListener('DOMContentLoaded', init);
 
 // the init function will wait for all the dom content to load before running any javascript, so we include all our javascript inside the function
 function init() { 
-    // may be unnecessary 
+    // may be unnecessary
+    // Checks for a classList in local storage; Returns what if it exists 
+    // or empty array if not 
     const classList = JSON.parse(localStorage.getItem("classList")) || []; // goated
     generateDropDown(classList);
 
